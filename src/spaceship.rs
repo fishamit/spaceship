@@ -4,6 +4,7 @@ use crate::physics::{Position, Velocity};
 use bevy::math::Vec2;
 use bevy::prelude::*;
 use rand::Rng;
+use crate::enemy::setup_enemies;
 
 const ACCELERATION: f32 = 1000.;
 const MAX_VELOCITY: f32 = 400.;
@@ -12,7 +13,7 @@ pub struct SpaceshipPlugin;
 
 impl Plugin for SpaceshipPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_spaceship).add_systems(
+        app.add_systems(Startup, spawn_spaceship.before(setup_enemies)).add_systems(
             FixedUpdate,
             (
                 handle_spaceship_movement,
@@ -238,3 +239,7 @@ pub struct BoostFireBundle {
     pub sprite: SpriteBundle,
     pub marker: BoostFire,
 }
+
+
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+pub struct SpaceshipStartupSet;

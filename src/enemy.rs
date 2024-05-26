@@ -6,23 +6,36 @@ pub struct EnemiesPlugin;
 
 impl Plugin for EnemiesPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, setup_enemies);
+        app.add_systems(Startup, setup_enemies.in_set(EnemyStartupSet));
     }
 }
-
-fn setup_enemies(
+pub fn setup_enemies(
     mut commands: Commands,
-    asset_server: Res<AssetServer>
+    asset_server: Res<AssetServer>,
+    q_spaceship: Query<&Position, With<Spaceship>>
 ) {
-    commands.spawn(EnemyBundle {
-        sprite: SpriteBundle {
-            texture: asset_server.load("enemy1.png"),
-            ..default()
-        },
-        velocity: Velocity(Vec2::ZERO),
-        position: Position { current: Vec2::ZERO, previous: Vec2::ZERO },
-        marker: Enemy,
-    });
+    const ENEMIES_AMOUNT: u32 = 10;
+    let player_position = q_spaceship.single();
+
+    let mut spawn_pos = player_position.current + Vec2::new(ENEMIES_AMOUNT as f32 * 64. / -2., 200.);
+
+    // let mut spawn_pos = Vec2::ZERO;
+
+
+
+    for _ in 0..10 {
+        commands.spawn(EnemyBundle {
+            sprite: SpriteBundle {
+                texture: asset_server.load("enemy1.png"),
+                ..default()
+            },
+            velocity: Velocity(Vec2::ZERO),
+            position: Position { current: spawn_pos, previous: spawn_pos },
+            marker: Enemy,
+        });
+        spawn_pos += Vec2::new(64., 0.);
+    }
+
 }
 
 #[derive(Component)]
@@ -35,3 +48,6 @@ struct EnemyBundle {
     pub position: Position,
     pub marker: Enemy,
 }
+
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+pub struct EnemyStartupSet;
