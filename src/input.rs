@@ -10,6 +10,7 @@ impl Plugin for InputPlugin {
     }
 }
 
+
 fn setup(mut commands: Commands) {
     commands.spawn(InputState {
         up: false,
