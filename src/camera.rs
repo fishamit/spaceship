@@ -43,6 +43,7 @@ fn spawn_camera(mut commands: Commands) {
 
 #[derive(Component)]
 pub struct Camera;
+
 #[derive(Component)]
 pub struct CameraData {
     pub target_scale: f32,
@@ -86,8 +87,6 @@ fn move_camera(
         else if target_scale == camera_data.max_zoom && projection.scale > camera_data.max_zoom { projection.scale = camera_data.max_zoom }
     }
 
-
-
     if camera_data.shake && camera_data.shake_timer.tick(time.delta()).finished() {
         let x = rand::thread_rng().gen_range(-7f32..7f32);
         let y = rand::thread_rng().gen_range(-20f32..20f32);
@@ -107,12 +106,9 @@ fn camera_follow(
     camera_position.previous = camera_position.current;
     camera_position.current.y = camera_position.current.y + (player_position.current.y - camera_position.current.y) * 5. * time.delta_seconds();
     camera_position.current.x = camera_position.current.x + (player_position.current.x - camera_position.current.x) * 5. *  time.delta_seconds();
-    // camera_position.current += (player_position.current - camera_position.current) * 10.0 * time.delta_seconds();
-
 }
 
-fn update_visible_space(
-    // window: Query<&Window, With<PrimaryWindow>>,
+pub fn update_visible_space(
     q_camera: Query<(&Transform, &OrthographicProjection), With<bevy::prelude::Camera>>,
     mut visible_space: Query<&mut VisibleSpace>
 ) {
