@@ -20,7 +20,15 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         .insert_resource(ClearColor(Color::rgb(0., 0., 0.)))
-        .add_plugins((StarsPlugin, InputPlugin, CameraPlugin, SpaceshipPlugin, EnemiesPlugin, BulletPlugin, PhysicsPlugin))
+        .add_plugins((
+            StarsPlugin,
+            InputPlugin,
+            CameraPlugin,
+            SpaceshipPlugin,
+            EnemiesPlugin,
+            BulletPlugin,
+            PhysicsPlugin
+        ))
         .run();
 }
 

@@ -1,11 +1,7 @@
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 use bevy::prelude::*;
-use bevy::window::PrimaryWindow;
-use rand::Rng;
 use crate::camera::VisibleSpace;
-use crate::physics::Position;
-use crate::spaceship::Spaceship;
 use std::collections::hash_map::DefaultHasher;
 
 const CHUNK_WIDTH: f32 = 1000.;
@@ -40,13 +36,11 @@ impl Plugin for StarsPlugin {
         app
             .add_systems(Startup, setup_stars)
             .add_systems(Update, (update_visible_star_field, handle_star_spawning, handle_star_despawning));
-            // .add_systems(Update, handle_starmap_position);
 
     }
 }
 
 fn setup_stars(mut commands: Commands) {
-    // commands.spawn(StarmapPosition(Vec2::ZERO));
     commands.spawn(VisibleStarField {
         top_left: Vec2::ZERO,
         bottom_right: Vec2::ZERO,
@@ -151,20 +145,3 @@ fn generate_star_properties(key: (i32, i32), max_offset: f32, max_scale: f32) ->
     (is_star, x_offset, y_offset, scale)
 }
 
-// fn handle_starmap_position(
-//     q_position: Query<&Position, With<Spaceship>>,
-//     mut starmap_position: Query<&mut StarmapPosition>
-// ) {
-//     let spaceship_position = q_position.single();
-//     let mut starmap_position = starmap_position.single_mut();
-//     starmap_position.0.x = quantize(spaceship_position.current.x / 1000.);
-//     starmap_position.0.y = quantize(spaceship_position.current.y / 1000.);
-// }
-//
-// fn quantize(n: f32) -> f32 {
-//     return if n >= 0. {
-//         n.floor()
-//     } else {
-//         n.ceil()
-//     }
-// }

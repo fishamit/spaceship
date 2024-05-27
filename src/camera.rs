@@ -1,12 +1,11 @@
 use bevy::app::{App, Startup};
 use bevy::prelude::*;
 use bevy::prelude::TimerMode::Repeating;
-use bevy::render::camera::{CameraProjection, ScalingMode};
-use bevy::window::PrimaryWindow;
+use bevy::render::camera::ScalingMode;
 use rand::Rng;
 use crate::spaceship::{Spaceship};
 use crate::input::{InputState};
-use crate::physics::{Position, Velocity};
+use crate::physics::Position;
 
 pub struct CameraPlugin;
 
@@ -21,7 +20,6 @@ impl Plugin for CameraPlugin {
 
 fn spawn_camera(mut commands: Commands) {
     let mut camera = Camera2dBundle::default();
-    // camera.projection.scale = 3.;
     camera.projection.scaling_mode = ScalingMode::FixedVertical(360.0);
     commands.spawn(VisibleSpace {
         top_left: Vec2::ZERO,
@@ -64,11 +62,11 @@ pub struct VisibleSpace {
 
 
 fn move_camera(
-    mut q_cam: Query<(&mut OrthographicProjection, &mut Transform, &mut CameraData, &mut Position), With<CameraData>>,
+    mut q_cam: Query<(&mut OrthographicProjection, &mut CameraData, &mut Position), With<CameraData>>,
     time: Res<Time>,
     input_state: Query<&InputState>
 ) {
-    let (mut projection, mut camera_transform, mut camera_data, mut position) = q_cam.single_mut();
+    let (mut projection, mut camera_data, mut position) = q_cam.single_mut();
     let input_state = input_state.single();
     let target_scale = camera_data.target_scale;
 
@@ -101,11 +99,11 @@ fn move_camera(
 
 fn camera_follow(
     mut camera_position: Query<&mut Position, With<Camera>>,
-    player_position: Query<(&Position, &Velocity), (With<Spaceship>, Without<Camera>)>,
+    player_position: Query<&Position, (With<Spaceship>, Without<Camera>)>,
     time: Res<Time>,
 ) {
     let mut camera_position = camera_position.single_mut();
-    let (player_position, player_velocity) = player_position.single();
+    let player_position = player_position.single();
     camera_position.previous = camera_position.current;
     camera_position.current.y = camera_position.current.y + (player_position.current.y - camera_position.current.y) * 5. * time.delta_seconds();
     camera_position.current.x = camera_position.current.x + (player_position.current.x - camera_position.current.x) * 5. *  time.delta_seconds();

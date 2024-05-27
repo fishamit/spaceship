@@ -1,8 +1,10 @@
 use bevy::prelude::*;
 use crate::physics::{Position, Velocity};
-use crate::spaceship::{GunTimer, Spaceship, SpaceshipState};
+use crate::spaceship::Spaceship;
 
 pub struct EnemiesPlugin;
+
+const ENEMIES_AMOUNT: u32 = 10;
 
 impl Plugin for EnemiesPlugin {
     fn build(&self, app: &mut App) {
@@ -14,14 +16,8 @@ pub fn setup_enemies(
     asset_server: Res<AssetServer>,
     q_spaceship: Query<&Position, With<Spaceship>>
 ) {
-    const ENEMIES_AMOUNT: u32 = 10;
     let player_position = q_spaceship.single();
-
     let mut spawn_pos = player_position.current + Vec2::new(ENEMIES_AMOUNT as f32 * 64. / -2., 200.);
-
-    // let mut spawn_pos = Vec2::ZERO;
-
-
 
     for _ in 0..10 {
         commands.spawn(EnemyBundle {
