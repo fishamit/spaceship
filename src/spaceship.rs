@@ -1,25 +1,30 @@
 use crate::bullet::{Bullet, BulletBundle, BulletTimer};
+use crate::enemy::setup_enemies;
 use crate::input::InputState;
 use crate::physics::{Position, Velocity};
 use bevy::math::Vec2;
 use bevy::prelude::*;
 use rand::Rng;
-use crate::enemy::setup_enemies;
 
-const ACCELERATION: f32 = 1000.;
+const ACCELERATION: f32 = 2500.;
 const MAX_VELOCITY: f32 = 400.;
+
+const ZERO_VELOCITY: f32 = 0.;
+
+const IDLE_BREAK_SPEED: f32 = 1200.;
 
 pub struct SpaceshipPlugin;
 
 impl Plugin for SpaceshipPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, spawn_spaceship.before(setup_enemies)).add_systems(
-            FixedUpdate,
-            (
-                handle_spaceship_movement,
-                velocity_guard.after(handle_spaceship_movement),
-            ),
-        );
+        app.add_systems(Startup, spawn_spaceship.before(setup_enemies))
+            .add_systems(
+                FixedUpdate,
+                (
+                    handle_spaceship_movement,
+                    velocity_guard.after(handle_spaceship_movement),
+                ),
+            );
     }
 }
 
@@ -32,13 +37,7 @@ fn spawn_spaceship(mut commands: Commands, asset_server: Res<AssetServer>) {
                 ..Default::default()
             },
             state: SpaceshipState {
-                shot_ready: true,
-                movement: Movement {
-                    up: false,
-                    right: false,
-                    left: false,
-                    down: false,
-                },
+                shot_ready: true
             },
             velocity: Velocity(Vec2::ZERO),
             position: Position {
@@ -70,9 +69,14 @@ fn spawn_spaceship(mut commands: Commands, asset_server: Res<AssetServer>) {
         });
 }
 
-
-fn velocity_guard(mut query: Query<&mut Velocity, With<Spaceship>>) {
+fn velocity_guard(
+    mut query: Query<&mut Velocity, With<Spaceship>>,
+    input_state: Query<&InputState>,
+    time: Res<Time>,
+) {
     let mut velocity = query.single_mut();
+    let input_state = input_state.single();
+    let is_idle = input_state.idle;
     if velocity.0.y > MAX_VELOCITY {
         velocity.0.y = MAX_VELOCITY
     };
@@ -85,6 +89,38 @@ fn velocity_guard(mut query: Query<&mut Velocity, With<Spaceship>>) {
     if velocity.0.x < -MAX_VELOCITY {
         velocity.0.x = -MAX_VELOCITY
     };
+
+    if is_idle {
+        let mut new_velocity = velocity.0;
+        // x axis
+        if new_velocity.x < 0. {
+            new_velocity.x += IDLE_BREAK_SPEED * time.delta_seconds();
+            if new_velocity.x > 0. {
+                new_velocity.x = 0.
+            }
+        } else if new_velocity.x > 0. {
+            new_velocity.x -= IDLE_BREAK_SPEED * time.delta_seconds();
+            if new_velocity.x < 0. {
+                new_velocity.x = 0.
+            }
+        }
+        // y axis
+        if new_velocity.y < ZERO_VELOCITY {
+            new_velocity.y += IDLE_BREAK_SPEED * time.delta_seconds();
+            if new_velocity.y > ZERO_VELOCITY {
+                new_velocity.y = ZERO_VELOCITY
+            }
+        } else if new_velocity.y > ZERO_VELOCITY {
+            new_velocity.y -= IDLE_BREAK_SPEED * time.delta_seconds();
+            if new_velocity.y < ZERO_VELOCITY {
+                new_velocity.y = ZERO_VELOCITY
+            }
+        }
+
+        if velocity.0 != new_velocity {
+            velocity.0 = new_velocity
+        };
+    }
 }
 
 fn handle_spaceship_movement(
@@ -198,8 +234,7 @@ pub struct Spaceship {
 
 #[derive(Component)]
 pub struct SpaceshipState {
-    shot_ready: bool,
-    movement: Movement,
+    shot_ready: bool
 }
 
 struct Movement {
@@ -207,6 +242,7 @@ struct Movement {
     right: bool,
     left: bool,
     down: bool,
+    idle: bool,
 }
 
 #[derive(Component)]
@@ -239,7 +275,6 @@ pub struct BoostFireBundle {
     pub sprite: SpriteBundle,
     pub marker: BoostFire,
 }
-
 
 #[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
 pub struct SpaceshipStartupSet;

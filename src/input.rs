@@ -17,6 +17,7 @@ fn setup(mut commands: Commands) {
         down: false,
         left: false,
         right: false,
+        idle: true,
         shooting: false,
         boost: false
     });
@@ -31,6 +32,7 @@ fn handle_input(
     input_state.down = key.pressed(KeyCode::KeyS);
     input_state.left = key.pressed(KeyCode::KeyA);
     input_state.right = key.pressed(KeyCode::KeyD);
+    input_state.idle = !key.pressed(KeyCode::KeyW) && !key.pressed(KeyCode::KeyS) && !key.pressed(KeyCode::KeyA) && !key.pressed(KeyCode::KeyD);
     input_state.shooting = key.pressed(KeyCode::Space);
     input_state.boost = key.pressed(KeyCode::KeyW) && key.pressed(KeyCode::ShiftLeft);
 }
@@ -41,6 +43,7 @@ pub struct InputState {
     pub down: bool,
     pub left: bool,
     pub right: bool,
+    pub idle: bool,
     pub shooting: bool,
     pub boost: bool,
 }

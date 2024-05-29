@@ -104,8 +104,9 @@ fn camera_follow(
     let mut camera_position = camera_position.single_mut();
     let player_position = player_position.single();
     camera_position.previous = camera_position.current;
-    camera_position.current.y = camera_position.current.y + (player_position.current.y - camera_position.current.y) * 5. * time.delta_seconds();
-    camera_position.current.x = camera_position.current.x + (player_position.current.x - camera_position.current.x) * 5. *  time.delta_seconds();
+    // camera_position.current.y = camera_position.current.y + (player_position.current.y - camera_position.current.y) * 8. * time.delta_seconds();
+    // camera_position.current.x = camera_position.current.x + (player_position.current.x - camera_position.current.x) * 8. * time.delta_seconds();
+    camera_position.current = camera_position.current + (player_position.current - camera_position.current) * 4. * time.delta_seconds() + Vec2::new(0.0, 5.0);
 }
 
 pub fn update_visible_space(

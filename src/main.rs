@@ -5,6 +5,7 @@ mod bullet;
 mod stars;
 mod physics;
 mod enemy;
+mod resource_manager;
 
 use crate::input::{InputPlugin};
 use bevy::prelude::*;

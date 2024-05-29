@@ -11,7 +11,6 @@ const VISIBLE_SPACE_MARGINS: f32 = STARS_DENSITY * 2.;
 
 pub struct StarsPlugin;
 
-
 #[derive(Component)]
 pub struct Star;
 
@@ -84,14 +83,12 @@ fn handle_star_spawning(
     q_visible_starfield: Query<&VisibleStarField>,
     mut q_starmap: Query<&mut StarMap>
 ) {
-    dbg!("spawning stars");
     let mut starmap = q_starmap.single_mut();
     let VisibleStarField {
         top_left,
         bottom_right
     } = q_visible_starfield.single();
-    dbg!(top_left);
-    let mut v_index = top_left.clone();
+    let mut v_index = *top_left;
     loop {
         let star_key = (v_index.x as i32, v_index.y as i32);
         if starmap.0.get(&star_key).is_none() {
@@ -130,7 +127,6 @@ fn handle_star_despawning(
 
     let visible_starfield = q_visible_starfield.single();
     let mut starmap = q_starmap.single_mut();
-    dbg!(visible_starfield.top_left);
     for (entity, transform, star_key) in q_stars.iter() {
         if transform.translation.x < visible_starfield.top_left.x
         || transform.translation.x > visible_starfield.bottom_right.x
