@@ -45,7 +45,7 @@ fn spawn_spaceship(mut commands: Commands, asset_server: Res<AssetServer>) {
                 previous: Vec2::ZERO,
             },
             marker: Spaceship { shot_ready: true },
-            gun_timer: GunTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
+            gun_timer: GunTimer(Timer::from_seconds(0.02, TimerMode::Repeating)),
         })
         .with_children(|parent| {
             parent.spawn(FireBundle {
@@ -208,7 +208,7 @@ fn handle_fire(
             },
             velocity: Velocity(Vec2::new(x_right, bullet_velocity)),
             marker: Bullet,
-            timer: BulletTimer(Timer::from_seconds(1.5, TimerMode::Once)),
+            timer: BulletTimer(Timer::from_seconds(10.5, TimerMode::Once)),
         });
         commands.spawn(BulletBundle {
             sprite: SpriteBundle {
@@ -221,7 +221,7 @@ fn handle_fire(
                 previous: Vec2::new(position.current.x - 10., position.current.y + 8.),
             },
             marker: Bullet,
-            timer: BulletTimer(Timer::from_seconds(1.5, TimerMode::Once)),
+            timer: BulletTimer(Timer::from_seconds(10.5, TimerMode::Once)),
         });
         spaceship_state.shot_ready = false;
     }
