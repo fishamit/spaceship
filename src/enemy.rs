@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use crate::explosion::ExplosionEvent;
 use crate::physics::{Position, Velocity};
 use crate::spaceship::Spaceship;
 
@@ -45,14 +46,16 @@ pub fn setup_enemies(
 pub fn handle_damage(
     mut commands: Commands,
     mut events: EventReader<Damage>,
-    mut q_enemies: Query<&mut Health, With<Enemy>>
+    mut explosion_event: EventWriter<ExplosionEvent>,
+    mut q_enemies: Query<(&mut Health, &Position), With<Enemy>>
 ) {
     for Damage(entity, damage) in events.read() {
-        let mut health = q_enemies.get_mut(*entity);
-        if let Ok(mut health) = health {
+        let enemy = q_enemies.get_mut(*entity);
+        if let Ok((mut health, pos)) = enemy {
             health.0 -= damage;
             if health.0 <= 0.0 {
                 commands.entity(*entity).despawn();
+                explosion_event.send(ExplosionEvent(*pos));
             }
         }
     }

@@ -20,7 +20,7 @@ impl Plugin for CameraPlugin {
 
 fn spawn_camera(mut commands: Commands) {
     let mut camera = Camera2dBundle::default();
-    camera.projection.scaling_mode = ScalingMode::FixedVertical(360.0);
+    camera.projection.scaling_mode = ScalingMode::FixedVertical(480.0);
     commands.spawn(VisibleSpace {
         top_left: Vec2::ZERO,
         bottom_right: Vec2::ZERO,
@@ -36,7 +36,7 @@ fn spawn_camera(mut commands: Commands) {
             shake: false,
             shake_timer: Timer::from_seconds(0.03, Repeating),
             max_zoom: 2.0,
-            min_zoom: 1.5
+            min_zoom: 1.,
         }
     ));
 }

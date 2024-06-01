@@ -6,12 +6,14 @@ mod stars;
 mod physics;
 mod enemy;
 mod resource_manager;
+mod explosion;
 
 use crate::input::InputPlugin;
 use bevy::prelude::*;
 use crate::bullet::BulletPlugin;
 use crate::camera::CameraPlugin;
 use crate::enemy::EnemiesPlugin;
+use crate::explosion::ExplosionsPlugin;
 use crate::physics::PhysicsPlugin;
 use crate::spaceship::SpaceshipPlugin;
 use crate::stars::StarsPlugin;
@@ -25,6 +27,7 @@ fn main() {
             InputPlugin,
             CameraPlugin,
             SpaceshipPlugin,
+            ExplosionsPlugin,
             EnemiesPlugin,
             BulletPlugin,
             PhysicsPlugin

@@ -45,7 +45,7 @@ fn spawn_spaceship(mut commands: Commands, asset_server: Res<AssetServer>) {
                 previous: Vec2::ZERO,
             },
             marker: Spaceship { shot_ready: true },
-            gun_timer: GunTimer(Timer::from_seconds(0.02, TimerMode::Repeating)),
+            gun_timer: GunTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
         })
         .with_children(|parent| {
             parent.spawn(FireBundle {

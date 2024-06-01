@@ -16,14 +16,14 @@ impl Plugin for PhysicsPlugin {
 fn interpolate(
     mut query: Query<(&mut Transform, &Position), With<Position>>,
     time: Res<Time<Fixed>>,
-    time_unfixed: Res<Time>
+    // time_unfixed: Res<Time>
 ) {
     let overstep = time.overstep_fraction();
     for (mut transform, position) in &mut query {
         transform.translation.x = position.previous.x + (position.current.x - position.previous.x) * overstep;
         transform.translation.y = position.previous.y + (position.current.y - position.previous.y) * overstep;
     }
-    dbg!(1. / time_unfixed.delta_seconds());
+    // dbg!(1. / time_unfixed.delta_seconds());
 }
 
 fn update_positions
@@ -49,7 +49,7 @@ fn handle_collisions
         for (bullet_ent, bullet_pos) in q_bullets.iter_mut() {
             if (bullet_pos.current - enemy_position.current).length_squared() <= enemy_collider.0.radius.powi(2) {
                 commands.entity(bullet_ent).despawn();
-                e_damage.send(Damage(enemy_entity, 20.));
+                e_damage.send(Damage(enemy_entity, 100.));
             }
         }
     }
@@ -58,7 +58,7 @@ fn handle_collisions
 #[derive(Component)]
 pub struct Velocity(pub Vec2);
 
-#[derive(Component)]
+#[derive(Component, Copy, Clone)]
 pub struct Position {
     pub current: Vec2,
     pub previous: Vec2
