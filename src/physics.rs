@@ -1,4 +1,3 @@
-use std::process::Command;
 use bevy::prelude::*;
 use bevy::math::Vec2;
 use crate::bullet::Bullet;
@@ -42,12 +41,12 @@ fn update_positions
 fn handle_collisions
 (
     mut commands: Commands,
-    mut q_bullets: Query<(Entity, &Position, &mut Velocity), With<Bullet>>,
+    mut q_bullets: Query<(Entity, &Position), With<Bullet>>,
     mut e_damage: EventWriter<Damage>,
     q_enemies: Query<(Entity, &Position, &Collider), With<Enemy>>
 ) {
     for (enemy_entity, enemy_position, enemy_collider) in q_enemies.iter() {
-        for (bullet_ent, bullet_pos, mut vel) in q_bullets.iter_mut() {
+        for (bullet_ent, bullet_pos) in q_bullets.iter_mut() {
             if (bullet_pos.current - enemy_position.current).length_squared() <= enemy_collider.0.radius.powi(2) {
                 commands.entity(bullet_ent).despawn();
                 e_damage.send(Damage(enemy_entity, 20.));

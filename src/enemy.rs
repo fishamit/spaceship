@@ -21,21 +21,25 @@ pub fn setup_enemies(
 ) {
     let player_position = q_spaceship.single();
     let mut spawn_pos = player_position.current + Vec2::new(ENEMIES_AMOUNT as f32 * 64. / -2., 200.);
-
     for _ in 0..10 {
-        commands.spawn(EnemyBundle {
-            sprite: SpriteBundle {
-                texture: asset_server.load("enemy1.png"),
-                ..default()
-            },
-            velocity: Velocity(Vec2::ZERO),
-            position: Position { current: spawn_pos, previous: spawn_pos },
-            marker: Enemy,
-            health: Health(100.0),
-            collider: Collider(Circle::new(16.0))
-        });
-        spawn_pos += Vec2::new(64., 0.);
+        for _ in 0..10 {
+            commands.spawn(EnemyBundle {
+                sprite: SpriteBundle {
+                    texture: asset_server.load("enemy1.png"),
+                    ..default()
+                },
+                velocity: Velocity(Vec2::ZERO),
+                position: Position { current: spawn_pos, previous: spawn_pos },
+                marker: Enemy,
+                health: Health(100.0),
+                collider: Collider(Circle::new(16.0))
+            });
+            spawn_pos += Vec2::new(64., 0.);
+        }
+        spawn_pos.x = ENEMIES_AMOUNT as f32 * 64. / -2.;
+        spawn_pos.y += 64.;
     }
+
 }
 
 pub fn handle_damage(

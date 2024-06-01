@@ -3,8 +3,8 @@ use bevy::prelude::*;
 use bevy::prelude::TimerMode::Repeating;
 use bevy::render::camera::ScalingMode;
 use rand::Rng;
-use crate::spaceship::{Spaceship};
-use crate::input::{InputState};
+use crate::spaceship::Spaceship;
+use crate::input::InputState;
 use crate::physics::Position;
 
 pub struct CameraPlugin;
@@ -35,8 +35,8 @@ fn spawn_camera(mut commands: Commands) {
             move_speed: 500.,
             shake: false,
             shake_timer: Timer::from_seconds(0.03, Repeating),
-            max_zoom: 1.5,
-            min_zoom: 0.9
+            max_zoom: 2.0,
+            min_zoom: 1.5
         }
     ));
 }
@@ -116,12 +116,12 @@ pub fn update_visible_space(
     let (camera_transform, camera_projection) = q_camera.single();
     let mut visible_space = visible_space.single_mut();
     let top_left = Vec2::new(
-        (camera_transform.translation.x - camera_projection.area.max.x * camera_projection.scale) ,
-        (camera_transform.translation.y + camera_projection.area.max.y * camera_projection.scale),
+        camera_transform.translation.x - camera_projection.area.max.x * camera_projection.scale,
+        camera_transform.translation.y + camera_projection.area.max.y * camera_projection.scale,
     );
     let bottom_right = Vec2::new(
-        (camera_transform.translation.x + camera_projection.area.max.x * camera_projection.scale),
-        (camera_transform.translation.y - camera_projection.area.max.y * camera_projection.scale),
+        camera_transform.translation.x + camera_projection.area.max.x * camera_projection.scale,
+        camera_transform.translation.y - camera_projection.area.max.y * camera_projection.scale,
     );
     // mutate component only when value is changed
     if visible_space.top_left != top_left {

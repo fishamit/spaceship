@@ -5,8 +5,6 @@ use crate::camera::VisibleSpace;
 use std::collections::hash_map::DefaultHasher;
 
 const STARS_DENSITY: f32 = 20.;
-const STARS_AMOUNT: u32 = 1000;
-
 const VISIBLE_SPACE_MARGINS: f32 = STARS_DENSITY * 2.;
 
 pub struct StarsPlugin;
@@ -22,9 +20,6 @@ pub struct VisibleStarField {
     top_left: Vec2,
     bottom_right: Vec2
 }
-
-#[derive(Component)]
-struct StarmapPosition(Vec2);
 
 #[derive(Component)]
 struct StarMap(HashMap<(i32, i32), bool>);

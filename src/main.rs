@@ -7,9 +7,8 @@ mod physics;
 mod enemy;
 mod resource_manager;
 
-use crate::input::{InputPlugin};
+use crate::input::InputPlugin;
 use bevy::prelude::*;
-use rand::Rng;
 use crate::bullet::BulletPlugin;
 use crate::camera::CameraPlugin;
 use crate::enemy::EnemiesPlugin;

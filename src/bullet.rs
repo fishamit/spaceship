@@ -23,8 +23,6 @@ pub struct Bullet;
 #[derive(Component)]
 pub struct BulletTimer(pub Timer);
 
-#[derive(Component)]
-struct BulletSpawnerTimer(pub Timer);
 
 fn handle_bullets(
     mut q_bullets: Query<(Entity, &mut BulletTimer), With<Bullet>>,
