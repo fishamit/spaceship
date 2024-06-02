@@ -11,7 +11,7 @@ const MAX_VELOCITY: f32 = 400.;
 
 const ZERO_VELOCITY: f32 = 0.;
 
-const IDLE_BREAK_SPEED: f32 = 1200.;
+const IDLE_BREAK_SPEED: f32 = 200.;
 
 pub struct SpaceshipPlugin;
 
@@ -90,6 +90,7 @@ fn velocity_guard(
         velocity.0.x = -MAX_VELOCITY
     };
 
+    // TODO split idle to idle_x and idle_y to fix movement bugs
     if is_idle {
         let mut new_velocity = velocity.0;
         // x axis

@@ -48,6 +48,7 @@ fn handle_collisions
     for (enemy_entity, enemy_position, enemy_collider) in q_enemies.iter() {
         for (bullet_ent, bullet_pos) in q_bullets.iter_mut() {
             if (bullet_pos.current - enemy_position.current).length_squared() <= enemy_collider.0.radius.powi(2) {
+                // TODO despawning twice bug? processing collision over and over
                 commands.entity(bullet_ent).despawn();
                 e_damage.send(Damage(enemy_entity, 100.));
             }

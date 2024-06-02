@@ -28,7 +28,11 @@ fn spawn_explosions(
         let animation_indices = AnimationIndices { first: 2, last: 14 };
         commands.spawn((
             SpriteBundle {
-                transform: Transform::from_translation(Vec3::new(event.0.current.x, event.0.current.y, 0.0)),
+                transform: Transform {
+                    translation: Vec3::new(event.0.current.x, event.0.current.y, 0.0),
+                    scale: Vec3::splat(2.0),
+                    ..default()
+                },
                 texture,
                 ..default()
             },
@@ -37,7 +41,7 @@ fn spawn_explosions(
                 index: animation_indices.first,
             },
             animation_indices,
-            AnimationTimer(Timer::from_seconds(0.07, TimerMode::Repeating)),
+            AnimationTimer(Timer::from_seconds(0.06, TimerMode::Repeating)),
             Explosion
         ));
     }
