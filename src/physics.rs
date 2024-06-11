@@ -64,4 +64,3 @@ pub struct Position {
     pub current: Vec2,
     pub previous: Vec2
 }
-

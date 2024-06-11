@@ -25,7 +25,7 @@ fn spawn_explosions(
         let layout = TextureAtlasLayout::from_grid(Vec2::splat(32.0), 15, 1, None, None);
         let texture_atlas_layout = texture_atlas_layouts.add(layout);
         // Use only the subset of sprites in the sheet that make up the run animation
-        let animation_indices = AnimationIndices { first: 2, last: 14 };
+        let animation_indices = AnimationIndices { first: 0, last: 12 };
         commands.spawn((
             SpriteBundle {
                 transform: Transform {
@@ -41,7 +41,7 @@ fn spawn_explosions(
                 index: animation_indices.first,
             },
             animation_indices,
-            AnimationTimer(Timer::from_seconds(0.06, TimerMode::Repeating)),
+            AnimationTimer(Timer::from_seconds(0.1, TimerMode::Repeating)),
             Explosion
         ));
     }
