@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use bevy::prelude::*;
 use crate::explosion::ExplosionEvent;
 use crate::physics::{Position, Velocity};
@@ -49,15 +51,20 @@ pub fn handle_damage(
     mut explosion_event: EventWriter<ExplosionEvent>,
     mut q_enemies: Query<(&mut Health, &Position), With<Enemy>>
 ) {
+    let mut entities_to_despawn = HashSet::new();
     for Damage(entity, damage) in events.read() {
         let enemy = q_enemies.get_mut(*entity);
         if let Ok((mut health, pos)) = enemy {
             health.0 -= damage;
             if health.0 <= 0.0 {
-                commands.entity(*entity).despawn();
+
+                entities_to_despawn.insert(*entity);
                 explosion_event.send(ExplosionEvent(*pos));
             }
         }
+    }
+    for entity in entities_to_despawn.iter() {
+        commands.entity(*entity).despawn();
     }
 }
 

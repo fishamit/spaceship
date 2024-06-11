@@ -4,7 +4,7 @@ use bevy::prelude::*;
 use crate::camera::VisibleSpace;
 use std::collections::hash_map::DefaultHasher;
 
-const STARS_DENSITY: f32 = 20.;
+const STARS_DENSITY: f32 = 30.;
 const VISIBLE_SPACE_MARGINS: f32 = STARS_DENSITY * 2.;
 
 pub struct StarsPlugin;
@@ -149,4 +149,3 @@ fn generate_star_properties(key: (i32, i32), max_offset: f32, max_scale: f32) ->
     let scale = 1.0 + ((hash / 1000000 / 1000000) % 1000000) as f32 / 1000000.0 * (max_scale - 1.0);
     (is_star, x_offset, y_offset, scale)
 }
-
